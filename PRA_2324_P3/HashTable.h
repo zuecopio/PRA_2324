@@ -20,7 +20,7 @@
 using namespace std;
 
 template <typename V> 
-class HashTable {
+class HashTable : public Dict<V> {
 	
 	private:
 		
@@ -57,10 +57,65 @@ class HashTable {
 		/*                                                              */
 		/****************************************************************/
 
-		ListLinked<TableEntry<V>> *table;
+		ListLinked<TableEntry<V>>* table;
 	
 	public:
 	
+		//----// INSERT //--------------------------------------+
+		void insert (string key, V value) override
+		{
+			int pos = h(key);
+			TableEntry<V> aux(key, value);
+			
+			if ((table[pos].search(aux)) == -1) {
+				table[pos].insert(table[pos].size(), aux);
+				n++;
+			}
+
+			else { throw runtime_error("Key already exists!"); }			
+		}
+		//------------------------------------------------------+
+		
+		
+		//----// SEARCH //--------------------------------------+
+		V search (string key) override
+		{
+			int pos = h(key);
+			TableEntry<V> aux(key);
+
+			int listPos = table[pos].search(aux);
+			
+			if (listPos == -1) { throw runtime_error("Key not found!"); }
+			
+			return table[pos].get(listPos).value;		
+		}
+		//------------------------------------------------------+
+		
+		
+		//----// REMOVE //--------------------------------------+
+		V remove (string key) override
+		{
+			int pos = h(key);
+			TableEntry<V> aux(key);
+			
+			int listPos = table[pos].search(aux);
+			
+			if (listPos == -1) { throw runtime_error("Key not found!"); }
+
+			n--;
+			return table[pos].remove(listPos).value;
+		}
+		//------------------------------------------------------+
+		
+		
+		//----// ENTRIES //-------------------------------------+
+		int entries() override
+		{
+			return n;	
+		}
+		//------------------------------------------------------+
+
+
 		/****************************************************************/
 		/*                       h (función hash)                       */
 		/*--------------------------------------------------------------*/
@@ -76,11 +131,11 @@ class HashTable {
 		/* SALIDA: int (cubeta).                                        */
 		/****************************************************************/
 
-		int h( string key )
+		int h (string key)
 		{
 			int sumASCII = 0;
 			
-			for(int i = 0; i < key.size(); i++)
+			for (int i = 0; i < key.size(); i++)
 			{
 				sumASCII += int(key.at(i));
 			}
@@ -102,7 +157,7 @@ class HashTable {
 		/* SALIDA: void.                                                */
 		/****************************************************************/
 
-		HashTable( int size )
+		HashTable (int size)
 		{
 			this->n = 0;
 			this->max = size;
@@ -122,7 +177,7 @@ class HashTable {
 		/* SALIDA: void.                                                */
 		/****************************************************************/
 
-		~HashTable()
+		~HashTable ()
 		{
 			delete[] table;
 		}
@@ -139,10 +194,11 @@ class HashTable {
 		/* SALIDA: int.                                                 */
 		/****************************************************************/
 
-		int capacity()
+		int capacity ()
 		{
 			return max;
 		}
+	
 	
 		/****************************************************************/
 		/*                           operator <<                        */
@@ -157,16 +213,16 @@ class HashTable {
 		/* SALIDA: out.                                                 */
 		/****************************************************************/
 
-		friend ostream& operator<<( ostream &out, const HashTable<V> &th )
+		friend ostream& operator<< (ostream &out, const HashTable<V> &th)
 		{
-			out << "HashTable [entries: " << entries() << ", capacity: " << capacity() << "]" << endl;
+			out << "HashTable [entries: " << (th.n) << ", capacity: " << (th.max) << "]" << endl;
 			out << "==============" << endl << endl;
-			for(int i = 0; i < capacity(); i++)
+			for (int i = 0; i < (th.max); i++)
 			{
-				out << "== Cubeta" << i << " ==" << endl;
-				out << th[i] << endl;
+				out << "== Cubeta " << i << " ==" << endl << endl;
+				out << th.table[i] << endl << endl;
 			}
-			out << "==============" << endl << endl;
+			out << "==============" << endl;
 			return out;
 		}
 	
@@ -183,47 +239,11 @@ class HashTable {
 		/*                                                              */
 		/* SALIDA: Devuelve el elemento V situado en la posición pos.   */
 		/****************************************************************/
-
-                V operator[]( string key )
+		
+		V operator[] (string key)
 		{
 			return search(key);
 		}
-		
-		
-		//----// INSERT //--------------------------------------+
-		void insert( string key, V value ) override
-		{
-
-		}
-		//------------------------------------------------------+
-		
-		
-		//----// SEARCH //--------------------------------------+
-		V search( string key ) override
-		{
-			int pos = h(key);
-			
-			if( table[pos].get(1) == NULL ) { throw runtime_error(); }
-			
-			return table[pos].get(0);		
-		}
-		//------------------------------------------------------+
-		
-		
-		//----// REMOVE //--------------------------------------+
-		V remove( string key ) override
-		{
-
-		}
-		//------------------------------------------------------+
-		
-		
-		//----// ENTRIES //-------------------------------------+
-		int entries() override
-		{
-			return n;	
-		}
-		//------------------------------------------------------+
 };
 
 #endif
