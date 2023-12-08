@@ -76,7 +76,7 @@ class TableEntry {
 		TableEntry( string key )
 		{
 			this->key = key;
-			this->value = NULL;
+			//this->value = NULL;
 		}
 	
 		/****************************************************************/
@@ -93,8 +93,8 @@ class TableEntry {
 
 		TableEntry()
 		{
-			this->key = NULL;
-			this->value = NULL;
+			this->key = "";
+			//this->value = NULL;
 		}
 	
 		/****************************************************************/
