@@ -72,7 +72,7 @@ class HashTable : public Dict<V> {
 				n++;
 			}
 
-			else { throw runtime_error("Key already exists!"); }			
+			else { throw runtime_error("Key '" + key + "' already exists!"); }			
 		}
 		//------------------------------------------------------+
 		
@@ -85,7 +85,7 @@ class HashTable : public Dict<V> {
 
 			int listPos = table[pos].search(aux);
 			
-			if (listPos == -1) { throw runtime_error("Key not found!"); }
+			if (listPos == -1) { throw runtime_error("Key '" + key + "' not found!"); }
 			
 			return table[pos].get(listPos).value;		
 		}
@@ -96,11 +96,12 @@ class HashTable : public Dict<V> {
 		V remove (string key) override
 		{
 			int pos = h(key);
+			//string info = "Key '" + key + "' not found!";
 			TableEntry<V> aux(key);
 			
 			int listPos = table[pos].search(aux);
 			
-			if (listPos == -1) { throw runtime_error("Key not found!"); }
+			if (listPos == -1) { throw runtime_error("Key '" + key + "' not found!"); }
 
 			n--;
 			return table[pos].remove(listPos).value;
