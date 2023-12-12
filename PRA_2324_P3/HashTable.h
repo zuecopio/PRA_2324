@@ -58,6 +58,33 @@ class HashTable : public Dict<V> {
 		/****************************************************************/
 
 		ListLinked<TableEntry<V>>* table;
+		
+		/****************************************************************/
+		/*                       h (función hash)                       */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Función hash que devuelve la posición (cubeta) en la tabla   */
+		/* hash de key. Se calculará como el resto de la divisón entre  */
+		/* la suma de los valores ASCII numéricos de los caracteres de  */
+		/* la clave y el tamaño de la tabla hash.                       */
+		/*                                                              */
+		/* ENTRADA: string key.                                         */
+		/*                                                              */
+		/* SALIDA: int (cubeta).                                        */
+		/****************************************************************/
+
+		int h (string key)
+		{
+			int sumASCII = 0;
+			
+			for (int i = 0; i < key.size(); i++)
+			{
+				sumASCII += int(key.at(i));
+			}
+			
+			return sumASCII % capacity();
+		}
 	
 	public:
 	
@@ -117,33 +144,6 @@ class HashTable : public Dict<V> {
 		//------------------------------------------------------+
 
 
-		/****************************************************************/
-		/*                       h (función hash)                       */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Función hash que devuelve la posición (cubeta) en la tabla   */
-		/* hash de key. Se calculará como el resto de la divisón entre  */
-		/* la suma de los valores ASCII numéricos de los caracteres de  */
-		/* la clave y el tamaño de la tabla hash.                       */
-		/*                                                              */
-		/* ENTRADA: string key.                                         */
-		/*                                                              */
-		/* SALIDA: int (cubeta).                                        */
-		/****************************************************************/
-
-		int h (string key)
-		{
-			int sumASCII = 0;
-			
-			for (int i = 0; i < key.size(); i++)
-			{
-				sumASCII += int(key.at(i));
-			}
-			
-			return sumASCII % capacity();
-		}
-	
 		/****************************************************************/
 		/*                    HashTable (constructor)                   */
 		/*--------------------------------------------------------------*/
