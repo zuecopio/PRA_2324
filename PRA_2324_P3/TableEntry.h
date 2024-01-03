@@ -157,6 +157,42 @@ class TableEntry {
 			out << "('" << te.key << "' => " << te.value << ")";
 			return out;
 		}
+
+		/****************************************************************/
+		/*                           operator <                         */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Sobrecarga global del operador < para comparar el contenido  */
+		/* de dos TableEntry.                                           */
+		/*                                                              */
+		/* ENTRADA: const TableEntry<V> &te1, const TableEntry<V> &te2  */
+		/*                                                              */
+		/* SALIDA: out.                                                 */
+		/****************************************************************/
+
+		friend bool operator< (const TableEntry<V> &te1, const TableEntry<V> &te2) {
+
+			return (te1.key < te2.key) ? (1) : (0);
+		}
+
+		/****************************************************************/
+		/*                           operator >                         */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Sobrecarga global del operador > para comparar el contenido  */
+		/* de dos TableEntry.                                           */
+		/*                                                              */
+		/* ENTRADA: const TableEntry<V> &te1, const TableEntry<V> &te2  */
+		/*                                                              */
+		/* SALIDA: out.                                                 */
+		/****************************************************************/
+
+		friend bool operator> (const TableEntry<V> &te1, const TableEntry<V> &te2) {
+
+			return (te1.key > te2.key) ? (1) : (0);
+		}
 };
 
 #endif
