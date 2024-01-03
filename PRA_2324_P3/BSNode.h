@@ -4,7 +4,7 @@
  |     Versión     : P03_v1                            | 
  |     Autor       : Marcos Belda Martínez             |
  |     Asignatura  : PRA-GIIROB                        |     
- |     Descripción : Interfaz BSNode                   |
+ |     Descripción : Interfaz genérica BSNode          |
  +-----------------------------------------------------*/
 
 #ifndef BSNODE_H
@@ -14,7 +14,7 @@
 
 using namespace std;
 
-template <typename V> 
+template <typename T> 
 class BSNode {
 	
 	public:
@@ -24,7 +24,7 @@ class BSNode {
 		/*--------------------------------------------------------------*/
 		/*                                                              */
 		/* DESCRIPCION:                                                 */
-		/* El elemento de tipo T almacenado en el nodo.                 */                                                 */
+		/* El elemento de tipo T almacenado en el nodo.                 */
 		/*                                                              */
 		/****************************************************************/
 
@@ -42,7 +42,7 @@ class BSNode {
 		BSNode<T>* left; 
 	
 		/****************************************************************/
-		/*                      rigth (atributo)                       */
+		/*                      rigth (atributo)                        */
 		/*--------------------------------------------------------------*/
 		/*                                                              */
 		/* DESCRIPCION:                                                 */
@@ -70,7 +70,7 @@ class BSNode {
 
 			this->elem = elem;
 			this->left = left;
-			this->rigth = rigth;
+			this->right = right;
 		}
 	
 		/****************************************************************/
@@ -89,9 +89,7 @@ class BSNode {
 
 		friend ostream& operator<<(ostream &out, const BSNode<T> &bsn) {
 
-			out << "Elemento  -> " << bsn.elem << enld;
-			out << "Izquierda -> " << bsn.left << enld;
-			out << "Drerecha  -> " << bsn.rigth << enld;
+			out << bsn.elem;
 
 			return out;
 		}
