@@ -11,136 +11,15 @@
 #define BSTREE_H
 
 #include <ostream>
-#include <stdexcepr>
-#include <BSNode.h>
+#include <stdexcept>
+#include "BSNode.h"
 
 using namespace std;
 
-template <typename V> 
+template <typename T> 
 class BSTree {
 	
 	private:
-	
-		/****************************************************************/
-		/*                      search (recursivo)                      */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Método recursivo para la búsqueda elementos en el ABB. Busca */
-		/* y devuelve el elemento e de tipo T si se encuentra en el     */
-		/* (sub-)árbol cuya raíz es n, de lo contrario lanza una        */
-		/* std::runtime_error.                                          */
-		/*                                                              */
-		/* ENTRADA: BSNode<T>* n, T e.                                  */
-		/*                                                              */
-		/* SALIDA: void.                                                */
-		/****************************************************************/
-
-		BSNode<T>* search (BSNode<T>* n, T e) const;
-
-		/****************************************************************/
-		/*                      insert (recursivo)                      */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Método recursivo para la inserción ordenada de elementos.    */
-		/* Inserta el elemento e de tipo T de manera ordenada en el     */
-		/* (sub-)árbol cuya raíz es n. Devuelve el nodo que encabeza    */
-		/* dicho (sub-)árbol modificado. Si el elemento e ya existe,    */
-		/* lanza un std::runtime_error.                                 */
-		/*                                                              */
-		/* ENTRADA: BSNode<T>* n, T e.                                  */
-		/*                                                              */
-		/* SALIDA: void.                                                */
-		/****************************************************************/
-
-		BSNode<T>* insert (BSNode<T>* n, T e);
-
-		/****************************************************************/
-		/*                   print_inorder (recursivo)                  */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Recorrido inorden o simétrico del (sub-)árbol cuya raíz es n */
-		/* para mostrar a través de out los elementos ordenados de      */
-		/* menor a mayor.                                               */
-		/*                                                              */
-		/* ENTRADA: BSNode<T>* n, T e.                                  */
-		/*                                                              */
-		/* SALIDA: void.                                                */
-		/****************************************************************/
-
-		void print_inorder (std::ostream &out, BSNode<T> n) const;
-
-		/****************************************************************/
-		/*                   print_inorder (recursivo)                  */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Método recursivo para la eliminación de elementos. Elimina   */
-		/* el elemento e del (sub-)árbol cuya raíz es n. Devuelve el    */
-		/* nodo que encabeza dicho (sub-)árbol modificado. En caso de   */
-		/* eliminar un nodo con dos sucesores (izquierdo y derecho),    */
-		/* aplicará la politica de reemplazo por el elemento máximo del */
-		/* subárbol izquierdo. Para ello, se apoyará en los métodos     */
-		/* privados auxiliares max() y remove_max(). Si el elemento e   */
-		/* no existe, lanza un std::runtime_error.                      */
-		/*                                                              */
-		/* ENTRADA: BSNode<T>* n, T e.                                  */
-		/*                                                              */
-		/* SALIDA: void.                                                */
-		/****************************************************************/
-
-		BSNode<T>* remove (BSNode<T>* n, T e);
-
-		/****************************************************************/
-		/*                          max (recursivo)                     */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Método recursivo que devuelve el elemento de máximo valor    */
-		/* contenido en el (sub-)árbol cuya raíz es n.                  */
-		/*                                                              */
-		/* ENTRADA: BSNode<T>* n.                                       */
-		/*                                                              */
-		/* SALIDA: void.                                                */
-		/****************************************************************/
-
-		T max (BSNode<T>* n) const;
-
-		/****************************************************************/
-		/*                     remove_max (recursivo)                   */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Método recursivo que elimina el elemento de máximo valor     */
-		/* contenido en el (sub-)árbol cuya raíz es n.                  */
-		/*                                                              */
-		/* ENTRADA: BSNode<T>* n.                                       */
-		/*                                                              */
-		/* SALIDA: void.                                                */
-		/****************************************************************/
-
-		BSNode<T>* remove_max (BSNode<T>* n);
-
-		/****************************************************************/
-		/*                  delete_cascade (recursivo)                  */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Método recursivo para liberación de la memoria dinámica      */
-		/* ocupada por los objetos de tipo BSNode<T> que conforman el   */
-		/* (sub-)árbol cuya raíz es n.                                  */
-		/*                                                              */
-		/* ENTRADA: BSNode<T>* n.                                       */
-		/*                                                              */
-		/* SALIDA: void.                                                */
-		/****************************************************************/
-
-		void delete_cascade (BSNode<T>* n);
-
-
-	public:
 	
 		/****************************************************************/
 		/*                       elem (atributo)                        */
@@ -163,6 +42,231 @@ class BSTree {
 		/****************************************************************/		
 
 		BSNode<T> *root;
+
+		/*-----------------------------------------------------+
+ 		 |     BUSQUEDA DE ELEMENTOS                           |
+ 		 +-----------------------------------------------------*/
+	
+		/****************************************************************/
+		/*                      search (recursivo)                      */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Método recursivo para la búsqueda elementos en el ABB. Busca */
+		/* y devuelve el elemento e de tipo T si se encuentra en el     */
+		/* (sub-)árbol cuya raíz es n, de lo contrario lanza una        */
+		/* std::runtime_error.                                          */
+		/*                                                              */
+		/* ENTRADA: BSNode<T>* n, T e.                                  */
+		/*                                                              */
+		/* SALIDA: void.                                                */
+		/****************************************************************/
+
+		BSNode<T>* search (BSNode<T>* n, T e) const {
+
+			if (n == nullptr) {	throw runtime_error("Element not found!"); }
+			
+			else if (n->elem < e) { return search (n->right, e); }
+			
+			else if (n->elem > e) { return search (n->left, e); }
+			
+			else { return n; }
+		}
+
+		/*-----------------------------------------------------+
+ 		 |     INSERCIÓN DE ELEMENTOS                          |
+ 		 +-----------------------------------------------------*/
+
+		/****************************************************************/
+		/*                      insert (recursivo)                      */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Método recursivo para la inserción ordenada de elementos.    */
+		/* Inserta el elemento e de tipo T de manera ordenada en el     */
+		/* (sub-)árbol cuya raíz es n. Devuelve el nodo que encabeza    */
+		/* dicho (sub-)árbol modificado. Si el elemento e ya existe,    */
+		/* lanza un std::runtime_error.                                 */
+		/*                                                              */
+		/* ENTRADA: BSNode<T>* n, T e.                                  */
+		/*                                                              */
+		/* SALIDA: void.                                                */
+		/****************************************************************/
+
+		BSNode<T>* insert (BSNode<T>* n, T e) {
+
+			if (n == nullptr) { return new BSNode (e); }
+			
+			else if (n->elem == e) { throw runtime_error("Duplicated element!"); }
+			
+			else if (n->elem < e) { n->right = insert (n->right, e); }
+			
+			else { n->left = insert (n->left, e); }
+
+			return n;
+		}
+
+		/*-----------------------------------------------------+
+ 		 |     RECORRIDO E IMPRESIÓN DEL ÁRBOL                 |
+ 		 +-----------------------------------------------------*/
+
+		/****************************************************************/
+		/*                   print_inorder (recursivo)                  */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Recorrido inorden o simétrico del (sub-)árbol cuya raíz es n */
+		/* para mostrar a través de out los elementos ordenados de      */
+		/* menor a mayor.                                               */
+		/*                                                              */
+		/* ENTRADA: BSNode<T>* n, T e.                                  */
+		/*                                                              */
+		/* SALIDA: void.                                                */
+		/****************************************************************/
+
+		void print_inorder (ostream &out, BSNode<T>* n) const {
+
+			if (n != nullptr) {
+				print_inorder (out, n->left);
+				out << n->elem << " ";
+				print_inorder (out, n->right);
+			}		
+		}
+
+		/*-----------------------------------------------------+
+ 		 |     ELIMINACIÓN DE ELEMENTOS                        |
+ 		 +-----------------------------------------------------*/
+
+		/****************************************************************/
+		/*                      remove (recursivo)                      */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Método recursivo para la eliminación de elementos. Elimina   */
+		/* el elemento e del (sub-)árbol cuya raíz es n. Devuelve el    */
+		/* nodo que encabeza dicho (sub-)árbol modificado. En caso de   */
+		/* eliminar un nodo con dos sucesores (izquierdo y derecho),    */
+		/* aplicará la politica de reemplazo por el elemento máximo del */
+		/* subárbol izquierdo. Para ello, se apoyará en los métodos     */
+		/* privados auxiliares max() y remove_max(). Si el elemento e   */
+		/* no existe, lanza un std::runtime_error.                      */
+		/*                                                              */
+		/* ENTRADA: BSNode<T>* n, T e.                                  */
+		/*                                                              */
+		/* SALIDA: void.                                                */
+		/****************************************************************/
+
+		BSNode<T>* remove (BSNode<T>* n, T e) {
+
+			if (n == nullptr) {	throw runtime_error("Element not found!"); }
+			
+			else if (n->elem < e) { n->right = remove (n->right, e); }
+			
+			else if (n->elem > e) { n->left = remove (n->left, e); }
+			
+			else {
+
+				/* Dos sucesores (izquierdo y derecho) */
+				if ((n->left != nullptr) && (n->right != nullptr)) {
+
+					n->elem = max (n->left);
+					n->left = remove_max (n->left);
+				}
+
+				/* Uno o cero sucesores */
+				else {
+					n = (n->left != nullptr) ? (n->left) : (n->right);
+				}
+			}
+
+			return n;
+
+		}
+
+		/****************************************************************/
+		/*                          max (recursivo)                     */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Método recursivo que devuelve el elemento de máximo valor    */
+		/* contenido en el (sub-)árbol cuya raíz es n.                  */
+		/*                                                              */
+		/* ENTRADA: BSNode<T>* n.                                       */
+		/*                                                              */
+		/* SALIDA: void.                                                */
+		/****************************************************************/
+
+		T max (BSNode<T>* n) const {
+
+			if (n == nullptr) {	throw runtime_error("Element not found!"); }
+
+			else if (n->right != nullptr) { return max (n->right); }
+
+			else { return n->elem; }
+		}
+
+		/****************************************************************/
+		/*                     remove_max (recursivo)                   */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Método recursivo que elimina el elemento de máximo valor     */
+		/* contenido en el (sub-)árbol cuya raíz es n.                  */
+		/*                                                              */
+		/* ENTRADA: BSNode<T>* n.                                       */
+		/*                                                              */
+		/* SALIDA: void.                                                */
+		/****************************************************************/
+
+		BSNode<T>* remove_max (BSNode<T>* n) {
+
+			if (n->right == nullptr) {
+
+				BSNode<T>* removed = n->left;
+				delete n;
+				return removed;
+			}
+
+			else {
+
+				n->right = remove_max (n->right);
+				return n;
+			}
+		}
+
+		/*-----------------------------------------------------+
+ 		 |     DESTRUCCIÓN                                     |
+ 		 +-----------------------------------------------------*/
+
+		/****************************************************************/
+		/*                  delete_cascade (recursivo)                  */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Método recursivo para liberación de la memoria dinámica      */
+		/* ocupada por los objetos de tipo BSNode<T> que conforman el   */
+		/* (sub-)árbol cuya raíz es n.                                  */
+		/*                                                              */
+		/* ENTRADA: BSNode<T>* n.                                       */
+		/*                                                              */
+		/* SALIDA: void.                                                */
+		/****************************************************************/
+
+		void delete_cascade (BSNode<T>* n) {
+
+			if (n != nullptr) {
+				delete_cascade (n->left);
+				delete_cascade (n->right);
+				delete n;
+			}
+		}
+
+
+	public:
+
+		/*-----------------------------------------------------+
+ 		 |     CREACIÓN Y TAMAÑO                               |
+ 		 +-----------------------------------------------------*/
 	
 		/****************************************************************/
 		/*                     BSTree (constructor)                     */
@@ -176,7 +280,11 @@ class BSTree {
 		/* SALIDA: void.                                                */
 		/****************************************************************/
 
-		BSTree ();
+		BSTree () {
+
+			this->nelem = 0;
+			this->root = nullptr;
+		}
 	
 		/****************************************************************/
 		/*                            size                              */
@@ -190,22 +298,14 @@ class BSTree {
 		/* SALIDA: int.                                                 */
 		/****************************************************************/
 
-		int size () const;
+		int size () const {
 
-		/****************************************************************/
-		/*                          operator []                         */
-		/*--------------------------------------------------------------*/
-		/*                                                              */
-		/* DESCRIPCION:                                                 */
-		/* Sobrecarga del operador[]. Actúa como interfaz al método     */
-		/* search( T e ).                                               */
-		/*                                                              */
-		/* ENTRADA: T e.                                                */
-		/*                                                              */
-		/* SALIDA: T e.                                                 */
-		/****************************************************************/
+			return nelem;
+		}
 
-		T operator[] (T e) const;
+		/*-----------------------------------------------------+
+ 		 |     BUSQUEDA DE ELEMENTOS                           |
+ 		 +-----------------------------------------------------*/
 
 		/****************************************************************/
 		/*                      search (lanzacera)                      */
@@ -223,7 +323,32 @@ class BSTree {
 		/* SALIDA: T e.                                                 */
 		/****************************************************************/
 
-		T search (T e) const;
+		T search (T e) const {
+
+			return (search (root, e))->elem;
+		}
+
+		/****************************************************************/
+		/*                          operator []                         */
+		/*--------------------------------------------------------------*/
+		/*                                                              */
+		/* DESCRIPCION:                                                 */
+		/* Sobrecarga del operador[]. Actúa como interfaz al método     */
+		/* search( T e ).                                               */
+		/*                                                              */
+		/* ENTRADA: T e.                                                */
+		/*                                                              */
+		/* SALIDA: T e.                                                 */
+		/****************************************************************/
+
+		T operator[] (T e) const {
+
+			return search (e);
+		}
+
+		/*-----------------------------------------------------+
+ 		 |     INSERCIÓN DE ELEMENTOS                          |
+ 		 +-----------------------------------------------------*/
 
 		/****************************************************************/
 		/*                      insert (lanzacera)                      */
@@ -239,7 +364,15 @@ class BSTree {
 		/* SALIDA: T e.                                                 */
 		/****************************************************************/
 
-		void insert (T e);
+		void insert (T e) {
+
+			root = insert (root, e);
+			nelem++;
+		}
+
+		/*-----------------------------------------------------+
+ 		 |     RECORRIDO E IMPRESIÓN DEL ÁRBOL                 |
+ 		 +-----------------------------------------------------*/
 
 		/****************************************************************/
 		/*                    operator << (lanzacera)                   */
@@ -257,7 +390,15 @@ class BSTree {
 		/* SALIDA: out.                                                 */
 		/****************************************************************/
 
-		friend ostream& operator<< (ostream &out, const BSTree<T> &bst);
+		friend ostream& operator<< (ostream &out, const BSTree<T> &bst) {
+
+			bst.print_inorder (out, bst.root);
+			return out;
+		}
+
+		/*-----------------------------------------------------+
+ 		 |     ELIMINACIÓN DE ELEMENTOS                        |
+ 		 +-----------------------------------------------------*/
 
 		/****************************************************************/
 		/*                      remove (lanzacera)                      */
@@ -273,7 +414,15 @@ class BSTree {
 		/* SALIDA: out.                                                 */
 		/****************************************************************/
 
-		void remove (T e);
+		void remove (T e) {
+
+			root = remove (root, e);
+			nelem--;
+		}
+
+		/*-----------------------------------------------------+
+ 		 |     DESTRUCCIÓN                                     |
+ 		 +-----------------------------------------------------*/
 
 		/****************************************************************/
 		/*                      ~BSTree (destructor)                    */
@@ -288,7 +437,10 @@ class BSTree {
 		/* SALIDA: void.                                                */
 		/****************************************************************/
 
-		BSNode<T>* remove_max (BSNode<T>* n);
+		~ BSTree () {
+
+			delete_cascade (root);
+		}
 };
 
 #endif
