@@ -57,29 +57,29 @@ class ListLinked : public List<T> {
 		{
 			if ( !(pos < 0 || pos > size()) )
 			{
-				if(size() == 0)
+				if (size() == 0)
 				{
-    				first = new Node(e);
-    				n++;
-    			}
-    			else if (pos == 0) { prepend(e); }
-    			else if (pos == size()) { append(e); }
-    			else
-    			{
-    				int i = 0;
-    				Node<T> *aux = first;
-    				Node<T> *prevAux = nullptr;
-    				while (i < pos)
-    				{
-    					prevAux = aux;
-    					aux = aux->next;
-    					i++;
+    					first = new Node(e);
+    					n++;
     				}
-    				Node<T> *insert = new Node(e, aux);
-    				prevAux->next = insert;
-    				n++;
+    				else if (pos == 0) { prepend(e); }
+    				else if (pos == size()) { append(e); }
+    				else
+    				{
+    					int i = 0;
+    					Node<T> *aux = first;
+    					Node<T> *prevAux = nullptr;
+    					while (i < pos)
+    					{
+    						prevAux = aux;
+    						aux = aux->next;
+    						i++;
+    					}
+    					Node<T> *insert = new Node(e, aux);
+    					prevAux->next = insert;
+    					n++;
+    				}
     			}
-    		}
 			else { throw std::out_of_range(info); }
 		}
 		//------------------------------------------------------+
@@ -95,7 +95,7 @@ class ListLinked : public List<T> {
 				aux = aux->next;
 			}
 			aux->next = insert;
-    		n++;
+    			n++;
 		}
 		//------------------------------------------------------+
 
@@ -106,7 +106,7 @@ class ListLinked : public List<T> {
 		{
 			Node<T> *insert = new Node(e, first);
 			first = insert;
-    		n++;
+    			n++;
 		}
 		//------------------------------------------------------+
 		
@@ -194,7 +194,7 @@ class ListLinked : public List<T> {
 		}
 		//------------------------------------------------------+
 		
-		
+
 
 		//----// EMPTY //---------------------------------------+
 		bool empty() override
