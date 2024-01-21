@@ -13,6 +13,7 @@
 #include <ostream>
 #include <stdexcept>
 #include "BSNode.h"
+#include "../PRA_2324_P1/ListLinked.h"
 
 using namespace std;
 
@@ -64,7 +65,7 @@ class BSTree {
 
 		BSNode<T>* search (BSNode<T>* n, T e) const {
 
-			if (n == nullptr) {	throw runtime_error("Element not found!"); }
+			if (n == nullptr) { throw runtime_error("Element not found!"); }
 			
 			else if (n->elem < e) { return search (n->right, e); }
 			
@@ -111,27 +112,117 @@ class BSTree {
  		 +-----------------------------------------------------*/
 
 		/****************************************************************/
-		/*                   print_inorder (recursivo)                  */
+		/*                   print_preorden (recursivo)                 */
 		/*--------------------------------------------------------------*/
 		/*                                                              */
 		/* DESCRIPCION:                                                 */
-		/* Recorrido inorden o simétrico del (sub-)árbol cuya raíz es n */
-		/* para mostrar a través de out los elementos ordenados de      */
-		/* menor a mayor.                                               */
+		/* Recorrido preorden del (sub-)árbol cuya raíz es n. Devuelve  */
+		/* el órden de introdicción de los nodos.                       */
 		/*                                                              */
-		/* ENTRADA: BSNode<T>* n, T e.                                  */
+		/* ENTRADA: ostream &out, BSNode<T>* n.                         */
 		/*                                                              */
 		/* SALIDA: void.                                                */
 		/****************************************************************/
 
-		void print_inorder (ostream &out, BSNode<T>* n) const {
+		void print_preorden (ostream &out, BSNode<T>* n) const {
 
 			if (n != nullptr) {
-				print_inorder (out, n->left);
 				out << n->elem << " ";
-				print_inorder (out, n->right);
+				print_preorden (out, n->left);
+				print_preorden (out, n->right);
 			}		
 		}
+		
+		/****************************************************************/
+                /*                   print_inorden (recursivo)                  */
+                /*--------------------------------------------------------------*/
+                /*                                                              */
+                /* DESCRIPCION:                                                 */
+                /* Recorrido inorden o simétrico del (sub-)árbol cuya raíz es n */
+                /* para mostrar a través de out los elementos ordenados de      */
+                /* menor a mayor.                                               */
+                /*                                                              */
+		/* ENTRADA: ostream &out, BSNode<T>* n.                         */
+                /*                                                              */
+                /* SALIDA: void.                                                */
+                /****************************************************************/
+
+                void print_inorden (ostream &out, BSNode<T>* n) const {
+
+                        if (n != nullptr) {
+                                print_inorden (out, n->left);
+                                out << n->elem << " ";
+                                print_inorden (out, n->right);
+                        }
+                }
+
+                /****************************************************************/
+                /*                  print_postorden (recursivo)                 */
+                /*--------------------------------------------------------------*/
+                /*                                                              */
+                /* DESCRIPCION:                                                 */
+                /* Recorrido postorden del (sub-)árbol cuya raíz es n. Devuelve */
+                /* el órden en el que se deben eliminar los nodos.              */
+                /*                                                              */
+                /* ENTRADA: ostream &out, BSNode<T>* n.                         */
+                /*                                                              */
+                /* SALIDA: void.                                                */
+                /****************************************************************/
+
+                void print_postorden (ostream &out, BSNode<T>* n) const {
+
+                        if (n != nullptr) {
+                                print_postorden (out, n->left);
+                                print_postorden (out, n->right);
+                                out << n->elem << " ";
+                        }
+                }
+
+                /****************************************************************/
+                /*                   print_anchura (recursivo)                  */
+                /*--------------------------------------------------------------*/
+                /*                                                              */
+                /* DESCRIPCION:                                                 */
+                /* Recorrido en anchura del (sub-)árbol cuya raíz es n. Visita  */
+		/* los nodos de un nivel antes de bajar al siguiente, necesita  */
+                /* necesita una estructura auxiliar.                            */
+                /*                                                              */
+                /* ENTRADA: ostream &out, BSNode<T>* n.                         */
+                /*                                                              */
+                /* SALIDA: void.                                                */
+                /****************************************************************/
+		
+                void print_anchura (ostream &out, BSNode<T>* n) const {
+                
+                      	ListLinked<BSNode<T>*> NodeList; // lista con los nodos vistados
+                      	BSNode<T>* node;
+                      	
+                      	// Q.PUSH(n)
+                      	NodeList.insert(NodeList.size(), n);
+
+                        while (!(NodeList.empty())) {
+                                               	                    	
+                        	// Q.POP() - sacar el primer nodo
+                        	node = NodeList.get(0);
+                        	NodeList.remove(0);
+                        	
+                        	if (node != nullptr) {
+                        		
+                        		// print (node.elem)
+                        		out << node->elem << " ";
+                        	                        	
+                        		// Q.PUSH(n.left)
+                        		if (node->left != nullptr) {
+                               			NodeList.insert(NodeList.size(), node->left);
+                        		}
+                                
+                              		// Q.PUSH(n.right)
+                              		if (node->right != nullptr) {
+                               			NodeList.insert(NodeList.size(), node->right);
+                        		}
+                      		}
+                       }
+                }
 
 		/*-----------------------------------------------------+
  		 |     ELIMINACIÓN DE ELEMENTOS                        |
@@ -158,7 +249,7 @@ class BSTree {
 
 		BSNode<T>* remove (BSNode<T>* n, T e) {
 
-			if (n == nullptr) {	throw runtime_error("Element not found!"); }
+			if (n == nullptr) { throw runtime_error("Element not found!"); }
 			
 			else if (n->elem < e) { n->right = remove (n->right, e); }
 			
@@ -184,7 +275,7 @@ class BSTree {
 		}
 
 		/****************************************************************/
-		/*                          max (recursivo)                     */
+		/*                        max (recursivo)                       */
 		/*--------------------------------------------------------------*/
 		/*                                                              */
 		/* DESCRIPCION:                                                 */
@@ -198,7 +289,7 @@ class BSTree {
 
 		T max (BSNode<T>* n) const {
 
-			if (n == nullptr) {	throw runtime_error("Element not found!"); }
+			if (n == nullptr) { throw runtime_error("Element not found!"); }
 
 			else if (n->right != nullptr) { return max (n->right); }
 
@@ -206,7 +297,7 @@ class BSTree {
 		}
 
 		/****************************************************************/
-		/*                     remove_max (recursivo)                   */
+		/*                    remove_max (recursivo)                    */
 		/*--------------------------------------------------------------*/
 		/*                                                              */
 		/* DESCRIPCION:                                                 */
@@ -392,7 +483,22 @@ class BSTree {
 
 		friend ostream& operator<< (ostream &out, const BSTree<T> &bst) {
 
-			bst.print_inorder (out, bst.root);
+			out << "PREORDEN  : ";
+			bst.print_preorden (out, bst.root);
+			out << endl;
+
+			out << "INORDEN   : ";
+                        bst.print_inorden (out, bst.root);
+                        out << endl;
+
+			out << "POSTORDEN : ";
+                        bst.print_postorden (out, bst.root);
+                        out << endl;
+                        
+                        out << "ANCHURA   : ";
+                        bst.print_anchura (out, bst.root);
+                        out << endl;
+			
 			return out;
 		}
 
